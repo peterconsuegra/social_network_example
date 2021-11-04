@@ -1,0 +1,33 @@
+<%=form_with model: user do |form|%>
+
+	<%=render "shared/form_errors", form: form%>
+	
+	<div clas="mb-3">
+		<%=form.label :bio%>
+		<%=form.text_area :bio, class: "form-control"%> 
+	</div>
+	
+	<div clas="mb-3">
+		<%=form.label :likes%>
+		<%=form.text_area :likes, class: "form-control"%>
+	</div>
+	
+	<div clas="mb-3">
+		<%=form.label :dislikes%>
+		<%=form.text_area :dislikes, class: "form-control"%>
+	</div>
+	
+	<div clas="mb-3">
+		<%=form.label :birth%>
+		<%= form.date_select(:birth,
+		                  include_blank: true,
+		                  selected: Date.today, # substitute 18.years.ago to prefill year
+		                  start_year: Date.today.year - 70,
+		                  end_year: Date.today.year) %> <br /><br />
+						  
+	</div>
+	
+	
+	<%=form.button "Save", class: "btn btn-primary"%>
+	
+<%end%>

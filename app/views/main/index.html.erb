@@ -1,0 +1,14 @@
+<%if Current.user%>
+
+<p>You are logged in</p>
+
+<p>See friend stuff</p>
+
+<%else%>
+
+<p>Please login </p>
+
+<%= link_to "Log in", "/sign_in" %>
+
+
+<%end%>

@@ -1,0 +1,53 @@
+<div id="posts_container">
+
+<% posts.each do |post| %>
+
+<div class="col-md-12 grid-margin">
+                    <div class="card rounded">
+                        <div class="card-header">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="d-flex align-items-center">
+                                    <a href="/<%=post.username%>"><img class="img-xs rounded-circle" style="margin-right:5px"  src="<%=get_avatar(post.profile_pic_id)%>" alt=""></a>
+                                    <div class="ml-2">
+                                        <p><a href="/<%=post.username%>"><%=post.name%> <%=post.last_name%></a> <br />
+                                        <i><%=post.created_at.strftime("%B %d, %Y")%></i></p>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <p class="mb-3 tx-14"> <%=post.body%></p>
+                            <div style="margin-left:20px" id="show_comments_for_post_<%=post.post_id%>">
+                            	
+								<%if !posts_comments[post.post_id].nil?%>
+									<% posts_comments[post.post_id].each do |comment| %>
+									<p>
+										 
+										<a href="/<%=comment.username%>"><img style="margin-right:5px" class="img-xs rounded-circle" src="<%=get_avatar(comment.profile_pic_id)%>" alt=""></a>
+										<a href="/<%=comment.username%>"><%=comment.name%> <%=comment.last_name%></a>
+										<%=comment.content%>
+									</p>
+										
+									<%end%>
+								<%end%>
+								
+                            </div>
+                        </div>
+                        <div id="comment_area_<%=post.post_id%>" class="card-footer">
+                            <div class="d-flex post-actions">
+                                
+                                <a href="javascript:;" class="d-flex align-items-center text-muted mr-4">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-message-square icon-md">
+                                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                                    </svg>
+                                    <p class="d-none d-md-block ml-2 ocomment" class_name="Post" post_id="<%=post.post_id%>">Comment</p>
+                                </a>
+                                
+                            </div>
+							
+                        </div>
+                    </div>
+                </div>
+<% end %>
+</div>

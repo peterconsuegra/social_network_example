@@ -1,0 +1,26 @@
+<div class="card rounded">
+    <div class="card-body">
+                    
+        <h6 class="card-title">Last comments</h6>
+
+		<% @last_comments.each do |comment| %>
+			
+			<div id="suggestion_2">
+			
+				     <div class="d-flex justify-content-between mb-2 pb-2 border-bottom">
+				         <div class="d-flex align-items-center hover-pointer">
+				             <a href="/<%=comment.username%>"><img class="img-xs rounded-circle" style="margin-right:5px" src="<%=get_avatar(comment.profile_pic_id)%>" alt=""></a>
+							
+				             <div class="ml-2">
+			                     
+				                 <p class="tx-11 text-muted"><a href="/<%=comment.username%>"><%=comment.name%> <%=comment.last_name%></a><br />
+									 <i><%=comment.created_at.strftime("%B %d, %Y")%></i><br />
+								 	 <%=summarize_text(comment.content)%>
+								 </p>
+				             </div>
+				         </div>
+				     </div>
+				</div>
+		<%end%>
+	</div>
+</div>

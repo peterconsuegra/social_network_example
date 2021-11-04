@@ -1,0 +1,9 @@
+<% friends.each do |friend| %>
+
+	  <div class="col-md-4">
+	      <figure>
+	          <a href="/<%=friend.username%>"><img class="img-fluid" src="<%= get_avatar(friend.profile_pic_id)%>" alt=""></a>
+	      </figure>
+	  </div>
+
+<%end%>

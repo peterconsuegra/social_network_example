@@ -1,0 +1,65 @@
+
+
+
+<section class="vh-100">
+  <div class="container py-5 h-100">
+    <div class="row d-flex align-items-center justify-content-center h-100">
+      <div class="col-md-8 col-lg-7 col-xl-6">
+		  <%= image_tag "/LogoSocialNetwork.png", style: 'height:100%;width:100%;margin-bottom:20px;' %>
+        
+      </div>
+      <div class="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
+        <%= form_with model: @user, url: sign_up_path do |form| %>
+		
+	    <%if form.object.errors.any?%>
+  	
+	  	<%form.object.errors.full_messages.each do |message|%>
+	  		<div class ="alert alert-danger">
+	  			<div><%=message%></div>
+	  		</div>
+	  	<%end%>
+  
+	    <%end%>
+		
+          <div class="form-outline mb-4">
+             <%= form.text_field :name, class: "form-control" %>
+            <%= form.label :name %>
+          </div>
+		  
+          <div class="form-outline mb-4">
+             <%= form.text_field :last_name, class: "form-control" %>
+            <%= form.label :last_name %>
+          </div>
+		  
+          <div class="form-outline mb-4">
+             <%= form.text_field :username, class: "form-control" %>
+            <%= form.label :username %>
+          </div>
+		
+          <!-- Email input -->
+          <div class="form-outline mb-4">
+             <%= form.text_field :email, class: "form-control", placeholder: "steve@apple.com" %>
+            <%= form.label :email %>
+          </div>
+
+          <!-- Password input -->
+          <div class="form-outline mb-4">
+            <%= form.password_field :password, class: "form-control", placeholder: "password" %>
+            <%= form.label :password %>
+          </div>
+
+
+          <div class="form-outline mb-4">
+            <%= form.password_field :password_confirmation, class: "form-control", placeholder: "password" %>
+            <%= form.label :password_confirmation %>
+          </div>
+         
+
+          <!-- Submit button -->
+          <button type="submit" style="background-color: #210d0e; border-color:#fc6b63" class="btn btn-primary btn-lg btn-block">Create Account</button>
+
+        <%end%>
+      </div>
+    </div>
+  </div>
+</section>

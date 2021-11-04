@@ -1,0 +1,10 @@
+<%if @user.can_edit? %>
+	<div class="col-md-12 grid-margin">
+		<div class="card rounded">                
+	        <div class="card-body">
+	               <textarea id="post_body" rows="4" class="form-control" placeholder="What's on your mind, <%=@current_user.name%>"></textarea>
+				   <a id="add_post" class_name="Post" class="btn btn-block create_new_button" style="float:right;" href="#">Post</a>                        
+	        </div>
+		</div>
+	</div>
+<%end%>    

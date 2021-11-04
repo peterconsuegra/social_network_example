@@ -1,0 +1,165 @@
+	<script>
+	
+		/*Add Post logic */
+	
+		function add_post_content(post_id,body,profile_pic_id,username,user_name,user_last_name){
+		
+			html='<div class="card rounded">';
+	        html+='<div class="card-header">';
+	        html+='<div class="d-flex align-items-center justify-content-between">';
+	        html+='<div class="d-flex align-items-center">';
+	        html+='<a href="/'+username+'"><img class="img-xs rounded-circle" style="margin-right:5px" src="/avatars/avatar'+profile_pic_id+'.png" alt=""></a>';
+	        html+='<div class="ml-2">';
+	        html+='<p><a href="/'+username+'">'+user_name+' '+user_last_name+'</a> <br>';
+	        html+='<i>Just now</i></p>';
+	        html+='</div>';
+	        html+='</div>';
+	        html+='</div>';
+	        html+='</div>';
+	        html+='<div class="card-body">';
+	        html+='<p class="mb-3 tx-14">'+body+'</p>';
+	        html+='<div style="margin-left:20px" id="show_comments_for_post_'+post_id+'">';				
+	        html+='</div>';
+	        html+='</div>';
+	        html+='<div id="comment_area_'+post_id+'" class="card-footer">';
+	        html+='<div class="d-flex post-actions">';                    
+	        html+='<a href="javascript:;" class="d-flex align-items-center text-muted mr-4">';
+	        html+='<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-message-square icon-md">';
+	        html+='<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>';
+	        html+='</svg>';
+	        html+='<p class="d-none d-md-block ml-2 ocomment" class_name="Post" post_id="'+post_id+'">Comment</p>';
+	        html+='</a>';          
+	        html+='</div>';	
+	        html+='</div>';
+	        html+='</div>';
+			return html;
+		}
+	
+		$("#add_post").click(function() {
+	
+			post_body = $("#post_body").val()
+		
+		    $.ajax({
+		      type: "POST",
+		      url: "/users/add_post",
+		      dataType:"JSON",
+			  data:{post_body: post_body}, 
+		      success: function(response){
+				  
+				  profile_pic_id = "<%=@current_user.profile_pic_id%>";
+				  username = "<%=@current_user.username%>";
+				  user_name = "<%=@current_user.name%>";
+				  user_last_name = "<%=@current_user.last_name%>";
+				  
+				  $("#posts_container").prepend(add_post_content(response.id,response.body,profile_pic_id,username,user_name,user_last_name));
+				   comments_logic();
+		      }
+		    });
+		
+			return false;
+		
+		});	
+	
+		/*Add friends logic*/
+	
+		function add_friend_thumb(username,profile_pic_id){
+			avatar_url = "/avatars/avatar"+profile_pic_id+".png";
+			html='<div class="col-md-4"><figure>';
+		    html+='<a href="/'+username+'"><img class="img-fluid" src="'+avatar_url+'" alt=""></a>';
+		    html+='</figure></div>';
+			return html;
+		}
+	
+		function add_friend_notification(friend_name){
+		    html='<div class="alert alert-info onotification" role="alert">';
+			html+='<p style="font-size:11px">You became friends with '+friend_name+'</p>';
+			html+='</div>';
+			return html;
+		}
+	
+		function fade_out_notification(){
+			$('.onotification').fadeOut(2600);
+		}
+
+		$( ".add_friend" ).click(function() {
+		
+			target_id = $(this).attr("target_id");
+	  	
+		    $.ajax({
+		      type: "POST",
+		      url: "/users/add_friend",
+		      dataType:"JSON",
+			  data:{target_id:target_id}, 
+		      success: function(response){
+				  console.log(response);
+				  $("#suggestion_"+response.id).remove();
+				  $("#suggestion_header").append(add_friend_notification(response.name))
+				  fade_out_notification();
+				  <%if @user.can_edit?%>
+				  	$("#my_friends").append(add_friend_thumb(response.username,response.profile_pic_id))
+				  <%end%>
+		      }
+		    });
+		
+			return false;
+		});
+	
+	
+		/*Add comments logic*/
+		
+	
+		function comments_logic(){
+		
+			$(".add_comment").click(function() {
+		
+				post_id = $(this).attr("post_id");
+				class_name= $(this).attr("class_name");
+				content = $("#comment_to_"+post_id).val()
+		
+			    $.ajax({
+			      type: "POST",
+			      url: "/users/add_comment",
+			      dataType:"JSON",
+				  data:{post_id:post_id, class_name:class_name,content:content}, 
+			      success: function(response){
+				  
+					  console.log(response);
+				  
+					  comment = response["comment"];
+					  user = response["user"];
+				  
+					  html='<p><img style="margin-right:10px" class="img-xs rounded-circle" src="https://bootdey.com/img/Content/avatar/avatar'+user.profile_pic_id+'.png" alt="">';
+					  html+='<a href="/'+user.username+'">'+user.name+' '+user.last_name+'</a>&nbsp';
+					  html+=comment.content+"</p>";
+					  $("#show_comments_for_post_"+comment.commentable_id).append(html);
+					  $("#comment_to_"+comment.commentable_id).val("")
+			      }
+			    });
+		
+				return false;
+		
+			});
+			
+			
+			$(".ocomment").click(function() {
+			    
+				post_id = $(this).attr("post_id");
+				class_name = $(this).attr("class_name");
+				selector_id="comment_to_"+post_id
+				html='<textarea id="'+selector_id+'" rows="4" class="form-control"></textarea>';
+				html+='<a class_name="'+class_name+'" post_id="'+post_id+'" class="btn btn-block create_new_button add_comment" style="float:right;" href="#">Comment</a>'
+				if($("#"+selector_id).length == 0) {
+					$("#comment_area_"+post_id).append(html)
+					comments_logic();
+				}
+		
+				return false;
+			});
+		
+		}
+	
+	
+		comments_logic();
+	
+	
+	</script>
