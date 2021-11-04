@@ -11,10 +11,12 @@ ruby 3.0.2p107
 
 * Database creation
 rake db:create
+
+* Database migration
 rake db:migrate
 
-* Database initialization
+* Populate the social network with sample data
 rake db:seed
 
-All seed users have the password:
+All the sample users have the password:
 123456789
