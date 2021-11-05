@@ -9,6 +9,7 @@
 #recreate everythinh
 #rake db:drop db:create db:migrate db:seed
 
+require 'faker'
 
 #seed users logic
 User.destroy_all
